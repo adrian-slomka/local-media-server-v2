@@ -1,0 +1,307 @@
+{% extends 'base.html' %}
+
+{% block head %}<title>Watch {{media_items.title}}</title>{% endblock %}
+
+{% block body %}
+
+
+<div class="app-content">
+    <div class="details-container">
+
+        {% if media_items.backdrop_path %}
+            {% set backdrop_filename = 'images/backdrops/original_' + media_items.backdrop_path.lstrip('/') %} 
+        <div class="backdrop-image" style="background-image: url('{{ url_for('static', filename=backdrop_filename) }}');"></div> 
+        {% endif %}
+
+        <div class="content-page-paralax-box"></div>
+        <div class="details-page-wrapper">
+
+            <div class="details-info-container">
+                <div class="info-container">
+                    <div class="info-content genres-box">
+                        {% for genre in media_items.genres %}
+                        <div class="genre-info">{{ genre }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="info-content title-box">
+                        <div class="title">{{ media_items.title }}</div>
+                    </div>
+                    <div class="info-content details-box">
+
+                        {% if media_items.movie_details %}
+                            {% if media_items.release_date %}
+                            <div class="details-info year">{{ media_items.release_date[:4] }}</div>
+                            {% endif %}
+                        {% endif %}
+
+                        {% if media_items.tv_series_details %}
+                            {% if media_items.tv_series_details['in_production'] == 1 %}
+                            <div class="details-info year">{{ media_items.tv_series_details['first_air_date'][:4] }} — present</div>
+                            {% endif %}
+                            {% if media_items.tv_series_details['in_production'] == 0 %}
+                            <div class="details-info year">{{ media_items.tv_series_details['first_air_date'][:4] }} — {{ media_items.tv_series_details['last_air_date'][:4] }}</div>
+                            {% endif %}
+                        {% endif %}
+
+
+                        <div class="details-info">
+                            <img class="rating-icon" src="{{ url_for('static', filename='images/imdb.png') }}"/>
+                            {% if media_items.vote_average %}
+                            <div class="rating">{{ "%.1f"|format(media_items.vote_average) }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="details-info duration">
+                            <div class="duration-svg">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
+                                    <path d="M12 8V12L14.5 14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="duration">{{ duration }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="details-actions-container">
+                <div class="actions-contents">
+                    <div class="rating-star-buttons" data-item-id="{{ media_items.id }}">
+                        <div id="rating-star-1" class="detail-button-container rating-stars" onclick="submitRating(1)">
+                            <svg class="button-stars" fill="currentColor" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                <title>1 star</title>
+                                <path d="M3.488 13.184l6.272 6.112-1.472 8.608 7.712-4.064 7.712 4.064-1.472-8.608 6.272-6.112-8.64-1.248-3.872-7.808-3.872 7.808z"></path>
+                            </svg>
+                        </div>
+                        <div id="rating-star-2" class="detail-button-container rating-stars" onclick="submitRating(2)">
+                            <svg class="button-stars" fill="currentColor" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                <title>2 stars</title>
+                                <path d="M3.488 13.184l6.272 6.112-1.472 8.608 7.712-4.064 7.712 4.064-1.472-8.608 6.272-6.112-8.64-1.248-3.872-7.808-3.872 7.808z"></path>
+                            </svg>
+                        </div>
+                        <div id="rating-star-3" class="detail-button-container rating-stars" onclick="submitRating(3)">
+                            <svg class="button-stars" fill="currentColor" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                <title>3 stars</title>
+                                <path d="M3.488 13.184l6.272 6.112-1.472 8.608 7.712-4.064 7.712 4.064-1.472-8.608 6.272-6.112-8.64-1.248-3.872-7.808-3.872 7.808z"></path>
+                            </svg>
+                        </div>
+                        <div id="rating-star-4" class="detail-button-container rating-stars" onclick="submitRating(4)">
+                            <svg class="button-stars" fill="currentColor" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                <title>4 stars</title>
+                                <path d="M3.488 13.184l6.272 6.112-1.472 8.608 7.712-4.064 7.712 4.064-1.472-8.608 6.272-6.112-8.64-1.248-3.872-7.808-3.872 7.808z"></path>
+                            </svg>
+                        </div>
+                        <div id="rating-star-5" class="detail-button-container rating-stars" onclick="submitRating(5)">
+                            <svg class="button-stars" fill="currentColor" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                <title>5 stars</title>
+                                <path d="M3.488 13.184l6.272 6.112-1.472 8.608 7.712-4.064 7.712 4.064-1.472-8.608 6.272-6.112-8.64-1.248-3.872-7.808-3.872 7.808z"></path>
+                            </svg>
+                        </div>
+                    </div>                                                                  
+                    <div class="detail-action-buttons" data-item-id="{{ media_items.id }}">
+                        <div class="side-detail-button-container button-liked" onclick="setWatchlist(1)">
+                            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <rect fill="none"/>
+                                <title>Watchlist</title>
+                                <path d="M5 19.6693V4C5 3.44772 5.44772 3 6 3H18C18.5523 3 19 3.44772 19 4V19.6693C19 20.131 18.4277 20.346 18.1237 19.9985L12 13L5.87629 19.9985C5.57227 20.346 5 20.131 5 19.6693Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="side-detail-button-container button-more d-icon-items">
+                            <svg class="detail-icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <title>More</title>
+                                <circle cx="11" cy="7" r="1" transform="rotate(90 12 7)" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="12" cy="12" r="1" transform="rotate(90 12 12)" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="13" cy="17" r="1" transform="rotate(90 12 17)" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        
+                        <div id="optionsModal" class="modal">
+                            <div class="modal-content">
+                                <button onclick="reloadData()">placeholder</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="details-page-content-container">
+                <div class="controls-container">
+                    <div class="detail-items about active" data-target="about-content">About</div>
+
+                    
+                    {% if media_items.category == 'movie' %}
+                        <div class="detail-items season" data-target="movie-content">{{ media_items.title }}</div>
+                    {% endif %}
+                    
+                    {% if media_items.tv_seasons %}
+                        {% for season in media_items.tv_seasons %}
+                            <div class="detail-items season" data-target="season{{ season['season'] }}-content">Season {{ season['season'] }}</div>
+                        {% endfor %}
+                    {% endif %}
+
+                </div>
+                
+                <div class="page-content-container">
+                    <div class="content-section about-content active">
+                        <div class="non-flex-container">
+                            <p class="tagline">{{ media_items.tagline }}</p>
+                            <p class="overview">{{ media_items.description }}</p>
+                            
+                            <div class="metadata-container">
+                                {% if media_items.movie_details %}
+                                <div class="metadata-item-box">
+                                    <div class="metadata">Released</div>
+                                    {% if media_items.release_date %}
+                                    <div class="metadata-item">{{ media_items.release_date }}</div>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                                {% if media_items.tv_series_details %}
+                                <div class="metadata-item-box">
+                                    
+                                    {% if media_items.tv_series_details['in_production'] == 1 %}
+                                    <div class="metadata">Status</div>
+                                    <div class="metadata-item">In production</div>
+                                    {% endif %}
+                                    {% if media_items.tv_series_details['in_production'] == 0 %}
+                                    <div class="metadata">Status</div>
+                                    <div class="metadata-item">Ended</div>
+                                    {% endif %}
+                                </div>
+                                <div class="metadata-item-box">
+                                    {% if not media_items.tv_series_details['next_episode_to_air'] %}
+                                    <div class="metadata">Last Air Date</div>
+                                    <div class="metadata-item">{{media_items.tv_series_details['last_air_date']}}</div>
+                                    {% endif %}
+                                    {% if media_items.tv_series_details['next_episode_to_air'] %}
+                                    <div class="metadata">Next Episode</div>
+                                    <div class="metadata-item">{{media_items.tv_series_details['next_episode_to_air']}}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="metadata-item-box">
+                                    <div class="metadata">Seasons</div>
+                                    <div class="metadata-item">{{media_items.tv_series_details['number_of_seasons']}}</div>
+                                </div>
+                                <div class="metadata-item-box">
+                                    <div class="metadata">Episodes</div>
+                                    <div class="metadata-item">{{media_items.tv_series_details['number_of_episodes']}}</div>
+                                </div>
+                                {% endif %}
+
+                                <div class="metadata-item-box">
+                                    <div class="metadata">Languages</div>
+                                    <div class="metadata-item">{{ media_items.spoken_languages }}</div>
+                                </div>
+                                <div class="metadata-item-box">
+                                    <div class="metadata">Studio</div>
+                                    <div class="metadata-item">{{ media_items.studio }}</div>
+                                </div>
+
+                    
+                                
+                                {% if media_items.movie_details %}
+                                    <div class="metadata-item-box">
+                                        <div class="metadata">Budget</div>
+                                        <div class="metadata-item">${{ media_items.movie_details.budget }}</div>
+                                    </div>
+                                    <div class="metadata-item-box">
+                                        <div class="metadata">Revenue</div>
+                                        <div class="metadata-item">${{ media_items.movie_details.revenue }}</div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+            
+                    {% if media_items.category == 'movie' %}
+                    <div class="content-section item-content movie-content">
+                        {% if media_items.media_metadata[0]['key_frame'] %}
+                            {% set keyframe_path = 'images/keyFrames/'+ media_items.media_metadata[0]['key_frame'] %} 
+                        {% endif %}
+                        <div class="card-detail-item" item-id="{{media_items.id}}">
+
+                            {% set ttitle = media_items.title.replace(' ', '-') %}
+                            <div class="i-hover">
+                                <a class="c-d-link" href="{{ url_for('watch_page', metadata_id=media_items.media_metadata[0]['id'], title=ttitle) }}">
+                                    <img class="card-poster poster" src="{{ url_for('static', filename=keyframe_path) }}"></img>
+                                </a>
+                                <div class="card-info detail-cc">
+                                    <a class="c-d-link" href="{{ url_for('watch_page', metadata_id=media_items.media_metadata[0]['id'], title=ttitle) }}">
+                                        <div class="card-d-text" title="{{media_items.title}}">{{media_items.title}}</div>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="watched-checkmark button-highlights button-highlights-id-{{media_items.media_metadata[0]['id']}}" data-item-id="{{media_items.media_metadata[0]['id']}}" onclick="submitWatched({{media_items.media_metadata[0]['id']}})">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <title>Mark as watched</title>
+                                    <rect fill="currentColor"/>
+                                    <path d="M5 13.3636L8.03559 16.3204C8.42388 16.6986 9.04279 16.6986 9.43108 16.3204L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if media_items.tv_seasons %}
+                        {% for season in media_items.tv_seasons %}
+                            <div class="content-section item-content season{{ season['season'] }}-content">
+                                {% set episodes_in_season = media_items.media_metadata | selectattr('season', 'equalto', season['season']) | sort(attribute='episode') %}
+                                {% for episode in episodes_in_season %}
+                                    {% if episode['season'] == season['season'] %}
+
+                                        {% if episode['key_frame'] %}
+                                            {% set keyframe_path = 'images/keyFrames/'+ episode['key_frame'] %} 
+                                        {% endif %}
+
+                                        <div class="card-detail-item" item-id="{{media_items.id}}" metadata-item-id="{{episode['id']}}">
+
+                                            {% set ttitle = media_items.title.replace(' ', '-') + '-season-' + episode['season'] | string + '-episode-' + episode['episode'] | string %}
+                                            <div class="i-hover">
+                                                <a class="c-d-link" href="{{ url_for('watch_page', metadata_id=episode['id'], title=ttitle) }}">
+                                                    <img class="card-poster poster" src="{{ url_for('static', filename=keyframe_path) }}"></img>
+                                                </a>
+                                                <div class="card-info detail-cc">
+                                                    <a class="c-d-link" href="{{ url_for('watch_page', metadata_id=episode['id'], title=ttitle) }}">
+                                                        <div class="card-d-text" title="Episode {{episode['episode']}}">Episode {{episode['episode']}}</div>
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                            <div class="watched-checkmark button-highlights button-highlights-id-{{episode['id']}}" data-item-id="{{episode['id']}}" onclick="submitWatched({{episode['id']}})">
+                                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <title>Mark as watched</title>
+                                                    <rect fill="currentColor"/>
+                                                    <path d="M5 13.3636L8.03559 16.3204C8.42388 16.6986 9.04279 16.6986 9.43108 16.3204L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                </svg>
+                                            </div>
+                                            
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+
+
+
+        </div>
+
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/aboutToggle.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/userRating.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/userWatchlist.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/userWatched.js') }}"></script>
+{% endblock %}
+
+
+

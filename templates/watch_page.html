@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='4304.webp') }}">
+    <title>Watching: {{title.replace('-', ' ')}}</title>
+    
+</head>
+<body>
+    <div class="">
+        <div id="content" class="root-layout">
+            <div class="app-layout ">
+                <div class="app-header">
+                    <div class="header-container header-background">
+                        <div class="header-left-container">
+                            <div class="header-menu icon-back icon-items watchpage-back-svg" onclick="window.history.back();">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M4 10L3.29289 10.7071L2.58579 10L3.29289 9.29289L4 10ZM21 18C21 18.5523 20.5523 19 20 19C19.4477 19 19 18.5523 19 18L21 18ZM8.29289 15.7071L3.29289 10.7071L4.70711 9.29289L9.70711 14.2929L8.29289 15.7071ZM3.29289 9.29289L8.29289 4.29289L9.70711 5.70711L4.70711 10.7071L3.29289 9.29289ZM4 9L14 9L14 11L4 11L4 9ZM21 16L21 18L19 18L19 16L21 16ZM14 9C17.866 9 21 12.134 21 16L19 16C19 13.2386 16.7614 11 14 11L14 9Z" fill="currentColor"/>
+                                    </svg>
+                            </div>
+                            <div class="header-logo">
+                                <a class="header-logo-link" href="{{ url_for('index') }}">
+                                    <img src="{{ url_for('static', filename='4304.webp') }}"></img>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="header-right-container">
+                            <a class="header-actions icon-buttons icon-items search-icon" href="{{ url_for('search_page') }}">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="24" height="24" fill="none"/>
+                                    <circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" stroke-linejoin="round" stroke-width="2"/>
+                                    <path d="M19.6464 20.3536C19.8417 20.5488 20.1583 20.5488 20.3536 20.3536C20.5488 20.1583 20.5488 19.8417 20.3536 19.6464L19.6464 20.3536ZM20.3536 19.6464L15.3536 14.6464L14.6464 15.3536L19.6464 20.3536L20.3536 19.6464Z" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                            </a>
+                            <a class="header-actions icon-buttons icon-items watchlist-icon" href="{{ url_for('watchlist') }}">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="24" height="24" fill="none"/>
+                                    <path d="M5 19.6693V4C5 3.44772 5.44772 3 6 3H18C18.5523 3 19 3.44772 19 4V19.6693C19 20.131 18.4277 20.346 18.1237 19.9985L12 13L5.87629 19.9985C5.57227 20.346 5 20.131 5 19.6693Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                        </div>
+                
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+                <div class="watchpage-container">
+
+                    <div class="video-player-wrapper" item-id="{{item_id}}" metadata-id="{{metadata_id}}" data-start-time="{{ start_time }}">
+                        <video id="video" class="video-canvas" controls>
+                            <source src="{{ url_for('play', metadata_id=metadata_id, title=title, path=path) }}" type="video/mp4">
+                            
+                            {% if subtitles %}
+
+                                {% for subtitle in subtitles if subtitle.lang.lower() == 'en' %}
+                                <track src="{{ url_for('subtitles', metadata_id=metadata_id, title=title, path=subtitle['path']) }}"
+                                    kind="subtitles" srclang="{{subtitle.lang}}" label="{{subtitle.label}}" default>
+                                {% endfor %}
+
+                                {% for subtitle in subtitles if subtitle.lang.lower() != 'en' %}
+                                <track src="{{ url_for('subtitles', metadata_id=metadata_id, title=title, path=subtitle['path']) }}"
+                                    kind="subtitles" srclang="{{subtitle.lang}}" label="{{subtitle.label}}">
+                                {% endfor %}
+                                
+                            {% endif %}
+                        </video>
+                    </div>
+
+                    <div class="watchpage-video-details-container">
+                        <div class="watchpage-wrapper">
+                            {% if metadata.season or metadata.episode %}
+                            <div class="watchpage-title-container">
+                                <a href="{{ url_for( 'details_page', title=item.title, item_id=item.id) }}">
+                                    <div class="main-title wp-title-h1">   
+                                        <h1>{{item.title}}</h1>
+                                    </div>
+                                </a>
+                                <div class="sub-title wp-title-h1">
+                                    <h1>Episode - {{metadata.episode}}</h1>
+                                </div> 
+                            </div>  
+
+                                {% if next_episode_data %}
+                                <div class="next-vid-card">
+                                    <div class="watchpage-nextvid-container">
+                                        <div class="wp-next-text"><h1>NEXT VIDEO — Episode {{next_episode_data.episode}}</h1></div>
+
+                                        <div class="card-detail-item" card-item-id="{{next_episode_data.media_items_id}}" card-metadata-item-id="{{next_episode_data.id}}">
+                                            {% if next_episode_data.key_frame %}
+                                                {% set keyframe_path = 'images/keyFrames/'+ next_episode_data.key_frame %} 
+                                            {% endif %}
+                                            {% set ttitle = item.title.replace(" ", "-") + '-season-' + next_episode_data.season | string + '-episode-' + next_episode_data.episode | string %}
+                                            <a class="c-d-link next-vid-justify" href="{{ url_for('watch_page', metadata_id=next_episode_data.id, title=ttitle) }}">
+                                                <img class="card-poster poster" src="{{ url_for('static', filename=keyframe_path) }}"></img>
+                                            </a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                            {% endif %}
+
+
+                            {% if not metadata.season%}
+                            <div class="watchpage-title-container">
+                                <a href="{{ url_for( 'details_page', title=item.title, item_id=item.id ) }}">   
+                                    <div class="main-title wp-title-h1">
+                                        <h1>{{item.title}}</h1>
+                                    </div>
+                                </a>
+                            </div>
+                            {% endif %}
+
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+<script src="{{ url_for('static', filename='js/userWatchtimeTracker.js') }}"></script>
+
+</body>
+</html>

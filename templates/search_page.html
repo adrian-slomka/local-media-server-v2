@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block head %}<title>Search</title>{% endblock %}
+
+
+{% block body %}
+<script src="{{ url_for('static', filename='js/search.js') }}"></script>
+
+<div class="app-content">
+    <div class="search-page">
+        <div class="search-container">
+            <input class="search" type="text" id="search" placeholder="Search..." onkeyup="searchFunction()">
+        </div>
+        <div class="page-wrapper results-container" id="results"></div>
+    </div>
+</div>
+
+{% endblock %}

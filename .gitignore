@@ -1,0 +1,19 @@
+# Python env
+__pycache__/
+.env
+_venv/
+
+# testing
+test.py
+localdb.db
+*.json
+*.bat
+
+# resources
+posters/
+backdrops/
+keyFrames/
+
+ffmpeg.exe
+ffplay.exe
+ffprobe.exe

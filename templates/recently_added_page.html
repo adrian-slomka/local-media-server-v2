@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block head %}<title>Recently Added</title>{% endblock %}
+
+
+{% block body %}
+<div class="app-content">
+    <div class="content-container home-page">
+        <div class="page-wrapper sections">
+            
+            <div id="recent" class="sections">
+                <div class="scroller-header">
+                    <div class="scroller-title">Recently Updated</div>
+
+                </div>
+                <div class="tiles-container">
+                    {% for item in media_items %}
+                    <a class="card" href="{{ url_for( 'details_page', title=item['title'], item_id=item['id']) }}">
+                        <img class="card-poster poster" src="{{ url_for('static', filename='images/posters/w400_' + item['poster_path'].lstrip('/') if  item['poster_path'] else 'static/images/default_poster.jpg') }}" alt="{{ item['title'] }}"></img>
+                        <div class="card-info">
+                            <div class="card-text card-title" title="{{ item['title'] }}">{{ item['title'] }}</div>
+                            <div class="card-text card-description">{% for genre in item.genres %}{{ genre }}{% if not loop.last %} | {% endif %}{% endfor %}</div>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Pagination controls -->
+            <div class="pagination-container">
+                <div class="pagination-content">
+                    <div class="pagination">
+                        {% if current_page > 1 %}
+                            <a class="pagination-items pagination-actions" href="{{ url_for('recently_added_page', page=1) }}">First</a>
+                            <a class="pagination-items pagination-actions" href="{{ url_for('recently_added_page', page=current_page - 1) }}">Previous</a>
+                        {% endif %}
+
+                        <div class="pagination-items">Page {{ current_page }} of {{ total_pages }}</div>
+
+                        {% if current_page < total_pages %}
+                            <a class="pagination-items pagination-actions" href="{{ url_for('recently_added_page', page=current_page + 1) }}">Next</a>
+                            <a class="pagination-items pagination-actions" href="{{ url_for('recently_added_page', page=total_pages) }}">Last</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+{% endblock %}

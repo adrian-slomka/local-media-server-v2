@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block head %}<title>Stream Movies & TV Series</title>{% endblock %}
+
+
+{% block body %}
+<div class="app-content">
+    <div class="content-container home-page">
+        <div class="page-wrapper sections">
+            
+            <div id="recent" class="sections">
+                <div class="scroller-header"> 
+                    <a class="scroller-title" href="{{ url_for('recently_added_page') }}">Recently Updated — view more...</a>
+                    <div class="scroller-controlls">
+                        <div id="scroll-left-recent" class="scroller-arrows scroller-arrow-left icon-buttons icon-items">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M14.2893 5.70708C13.8988 5.31655 13.2657 5.31655 12.8751 5.70708L7.98768 10.5993C7.20729 11.3805 7.2076 12.6463 7.98837 13.427L12.8787 18.3174C13.2693 18.7079 13.9024 18.7079 14.293 18.3174C14.6835 17.9269 14.6835 17.2937 14.293 16.9032L10.1073 12.7175C9.71678 12.327 9.71678 11.6939 10.1073 11.3033L14.2893 7.12129C14.6799 6.73077 14.6799 6.0976 14.2893 5.70708Z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <div id="scroll-right-recent" class="scroller-arrows scroller-arrow-right icon-buttons icon-items">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.71069 18.2929C10.1012 18.6834 10.7344 18.6834 11.1249 18.2929L16.0123 13.4006C16.7927 12.6195 16.7924 11.3537 16.0117 10.5729L11.1213 5.68254C10.7308 5.29202 10.0976 5.29202 9.70708 5.68254C9.31655 6.07307 9.31655 6.70623 9.70708 7.09676L13.8927 11.2824C14.2833 11.6729 14.2833 12.3061 13.8927 12.6966L9.71069 16.8787C9.32016 17.2692 9.32016 17.9023 9.71069 18.2929Z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div id="scroller-recent" class="scroller-container">
+
+
+                    {% for item in media_items %}
+                    <a class="card" href="{{ url_for( 'details_page', title=item['title'], item_id=item['id']) }}">
+                        <img class="card-poster poster" src="{{ url_for('static', filename='images/posters/w400_' + item['poster_path'].lstrip('/') if item['poster_path'] else 'images/default_poster.jpg') }}" alt="{{ item['title'] }}"></img>
+                        <div class="card-info">
+                            <div class="card-text card-title" title="{{ item['title'] }}">{{ item['title'] }}</div>
+                            <div class="card-text card-description">{% for genre in item.genres %}{{ genre }}{% if not loop.last %} | {% endif %}{% endfor %}</div>
+                        </div>
+                    </a>
+                    {% endfor %} 
+
+                    
+                </div>
+            </div>
+
+            <div id="movies" class="sections">
+                <div class="scroller-header">
+                    <a class="scroller-title" href="{{ url_for('movies_page') }}">Movies — view more...</a>
+                    <div class="scroller-controlls">
+                        <div id="scroll-left-movies" class="scroller-arrows scroller-arrow-left icon-buttons icon-items">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M14.2893 5.70708C13.8988 5.31655 13.2657 5.31655 12.8751 5.70708L7.98768 10.5993C7.20729 11.3805 7.2076 12.6463 7.98837 13.427L12.8787 18.3174C13.2693 18.7079 13.9024 18.7079 14.293 18.3174C14.6835 17.9269 14.6835 17.2937 14.293 16.9032L10.1073 12.7175C9.71678 12.327 9.71678 11.6939 10.1073 11.3033L14.2893 7.12129C14.6799 6.73077 14.6799 6.0976 14.2893 5.70708Z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <div id="scroll-right-movies" class="scroller-arrows scroller-arrow-right icon-buttons icon-items">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.71069 18.2929C10.1012 18.6834 10.7344 18.6834 11.1249 18.2929L16.0123 13.4006C16.7927 12.6195 16.7924 11.3537 16.0117 10.5729L11.1213 5.68254C10.7308 5.29202 10.0976 5.29202 9.70708 5.68254C9.31655 6.07307 9.31655 6.70623 9.70708 7.09676L13.8927 11.2824C14.2833 11.6729 14.2833 12.3061 13.8927 12.6966L9.71069 16.8787C9.32016 17.2692 9.32016 17.9023 9.71069 18.2929Z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div id="scroller-movies" class="scroller-container">
+
+
+                    {% for item in movies %}
+                    <a class="card" href="{{ url_for( 'details_page', title=item['title'], item_id=item['id']) }}">
+                        <img class="card-poster poster" src="{{ url_for('static', filename='images/posters/w400_' + item['poster_path'].lstrip('/') if  item['poster_path'] else 'static/images/default_poster.jpg') }}" alt="{{ item['title'] }}"></img>
+                        <div class="card-info">
+                            <div class="card-text card-title" title="{{ item['title'] }}">{{ item['title'] }}</div>
+                            <div class="card-text card-description">{% for genre in item.genres %}{{ genre }}{% if not loop.last %} | {% endif %}{% endfor %}</div>
+                        </div>
+                    </a>
+                    {% endfor %}   
+                    
+                    
+                </div>
+            </div>
+
+            <div id="series" class="sections">
+                <div class="scroller-header">
+                    <a class="scroller-title" href="{{ url_for('series_page') }}">TV Show — view more...</a>
+                    <div class="scroller-controlls">
+                        <div id="scroll-left-series" class="scroller-arrows scroller-arrow-left icon-buttons icon-items">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M14.2893 5.70708C13.8988 5.31655 13.2657 5.31655 12.8751 5.70708L7.98768 10.5993C7.20729 11.3805 7.2076 12.6463 7.98837 13.427L12.8787 18.3174C13.2693 18.7079 13.9024 18.7079 14.293 18.3174C14.6835 17.9269 14.6835 17.2937 14.293 16.9032L10.1073 12.7175C9.71678 12.327 9.71678 11.6939 10.1073 11.3033L14.2893 7.12129C14.6799 6.73077 14.6799 6.0976 14.2893 5.70708Z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <div id="scroll-right-series" class="scroller-arrows scroller-arrow-right icon-buttons icon-items">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.71069 18.2929C10.1012 18.6834 10.7344 18.6834 11.1249 18.2929L16.0123 13.4006C16.7927 12.6195 16.7924 11.3537 16.0117 10.5729L11.1213 5.68254C10.7308 5.29202 10.0976 5.29202 9.70708 5.68254C9.31655 6.07307 9.31655 6.70623 9.70708 7.09676L13.8927 11.2824C14.2833 11.6729 14.2833 12.3061 13.8927 12.6966L9.71069 16.8787C9.32016 17.2692 9.32016 17.9023 9.71069 18.2929Z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div id="scroller-series" class="scroller-container">
+
+
+                    {% for item in series %}
+                    <a class="card" href="{{ url_for( 'details_page', title=item['title'], item_id=item['id']) }}">
+                        <img class="card-poster poster" src="{{ url_for('static', filename='images/posters/w400_' + item['poster_path'].lstrip('/') if  item['poster_path'] else 'static/images/default_poster.jpg') }}" alt="{{ item['title'] }}"></img>
+                        <div class="card-info">
+                            <div class="card-text card-title" title="{{ item['title'] }}">{{ item['title'] }}</div>
+                            <div class="card-text card-description">{% for genre in item.genres %}{{ genre }}{% if not loop.last %} | {% endif %}{% endfor %}</div>
+                        </div>
+                    </a>
+                    {% endfor %}   
+                    
+                    
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/scroller.js') }}"></script>
+{% endblock %}
+
