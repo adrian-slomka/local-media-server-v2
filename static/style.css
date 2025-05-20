@@ -119,23 +119,11 @@ li {
     transition: color 0.3s ease, background-color 0.3s ease;
 }
 
-.icon-buttons:hover {
-    border-radius: 50%;
-    color: #9e12a5;
-    background-color: rgba(138, 34, 143, 0.349)
-    
-}
-
 .icon-back {
     cursor: pointer;
     color: rgb(255, 255, 255);
     border-radius: 50%;
     transition: color 0.3s ease;
-}
-
-.icon-back:hover {
-    border-radius: 50%;
-    color: #9e12a5; 
 }
 
 .header-menu {
@@ -229,10 +217,6 @@ li {
 .drawer-icons svg {
     height: 1.5rem;
     width: 1.5rem;
-}
-
-.drawer-items:hover {
-    background-color: #3b3b3b;
 }
 
 .drawer-options-header {
@@ -363,10 +347,6 @@ h3 {
     grid-template-columns: 1fr 0fr;
 }
 
-.watchlist-row-item:hover {
-    background-color: #ffffff1e;
-}
-
 .watchlist-right-item {
     display: flex;
     width: 100%;
@@ -404,11 +384,6 @@ h3 {
     cursor: pointer;
     transition: 0.2s ease;
 }
-
-.w-icon-items:hover {
-    color: #9e12a5;
-}
-
 
 .card_ {
     display: flex;
@@ -459,7 +434,10 @@ h3 {
 }
 
 .card-d-text {
-    width: 100%;
+    width: 80%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .watched-checkmark {
@@ -482,10 +460,6 @@ h3 {
     color: #6b6b6b;
 }
 
-.button-highlights:hover {
-    color: #54a512;
-}
-
 /* "Filled" button styling (liked state) */
 .button-highlights.filled {
     color: #54a512; 
@@ -493,11 +467,6 @@ h3 {
 
 .i-hover {
     transition: filter 0.15s ease;
-}
-
-.i-hover:hover {
-    filter: brightness(50%);
-    z-index: 1;
 }
 
 .card-detail-item {
@@ -559,10 +528,6 @@ h3 {
     cursor: pointer;
 }
 
-.load-more-button:hover {
-    text-decoration: underline;
-}
-
 .hidden {
     display: none;
 }
@@ -590,10 +555,6 @@ h3 {
 
 .pagination-items {
     padding: 0 .5rem 0 .5rem;
-}
-
-.pagination-actions:hover {
-    border-bottom: 2px solid rgba(255, 255, 255, 0.575);
 }
 
 /* Medium Screens: 600px and above */
@@ -657,20 +618,43 @@ h3 {
 
 }
 
-/* Anything Bigger 
-@media (min-width: 30rem) {
-    .page-wrapper {
-        padding: 0 15vw;
-        margin: 0 auto;
-        height: 100vh;
-    }    
-}
-/* Disable hover effects on touch devices */
-@media (pointer: coarse) {
+@media (hover: hover) {
     .icon-buttons:hover {
-        background-color: transparent;
-        color: rgb(190, 190, 190);
-        cursor: default; 
+        border-radius: 50%;
+        color: #9e12a5;
+        background-color: rgba(138, 34, 143, 0.349) 
+    }
+    .w-icon-items:hover {
+        color: #9e12a5;
+    }
+    .drawer-items:hover {
+        background-color: #3b3b3b;
+    }
+    .watchlist-row-item:hover {
+        background-color: #ffffff1e;
+    }
+    .icon-back:hover {
+        border-radius: 50%;
+        color: #9e12a5; 
+    }
+    .button-liked:hover {
+        color: #9e12a5; /* or whatever your hover effect is */
+    }
+    .button-highlights:hover {
+        color: #54a512;
+    }
+    .i-hover:hover {
+        filter: brightness(50%);
+        z-index: 1;
+    }
+    .d-icon-items:hover {
+        color: #9e12a5;
+    }
+    .detail-items:hover {
+        border-bottom: 2px solid;
+    }
+    .pagination-actions:hover {
+        border-bottom: 2px solid rgba(255, 255, 255, 0.575);
     }
 }
 
@@ -963,10 +947,6 @@ h3 {
     transition: 0.2s ease;
 }
 
-.d-icon-items:hover {
-    color: #9e12a5;
-}
-
 .button-liked {
     width: 1.7rem;
     height: 1.7rem;
@@ -977,10 +957,6 @@ h3 {
 .button-liked svg {
     width: 1.7rem;
     height: 1.7rem;
-}
-
-.button-liked:hover {
-    color: #9e12a5;
 }
 
 /* "Filled" button styling (liked state) */
@@ -1016,10 +992,6 @@ h3 {
     font-weight: 700;
     border-bottom: 2px solid transparent; 
     transition: 0.2s ease;
-}
-
-.detail-items:hover {
-    border-bottom: 2px solid;
 }
 
 .detail-items.active {
