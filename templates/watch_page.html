@@ -80,11 +80,13 @@
                         <div class="watchpage-wrapper">
                             {% if metadata.season or metadata.episode %}
                             <div class="watchpage-title-container">
-                                <a href="{{ url_for( 'details_page', title=item.title, item_id=item.id) }}">
-                                    <div class="main-title wp-title-h1">   
+                                
+                                <div class="main-title wp-title-h1">
+                                    <a href="{{ url_for( 'details_page', title=item.title, item_id=item.id) }}">
                                         <h1>{{item.title}}</h1>
-                                    </div>
-                                </a>
+                                    </a>
+                                </div>
+                                
                                 <div class="sub-title wp-title-h1">
                                     <h1>Episode - {{metadata.episode}}</h1>
                                 </div> 
@@ -93,7 +95,7 @@
                                 {% if next_episode_data %}
                                 <div class="next-vid-card">
                                     <div class="watchpage-nextvid-container">
-                                        <div class="wp-next-text"><h1>NEXT VIDEO — Episode {{next_episode_data.episode}}</h1></div>
+                                        <div class="wp-next-text"><h1>NEXT EPISODE — {{next_episode_data.episode}}</h1></div>
 
                                         <div class="card-detail-item" card-item-id="{{next_episode_data.media_items_id}}" card-metadata-item-id="{{next_episode_data.id}}">
                                             {% if next_episode_data.key_frame %}
