@@ -860,9 +860,9 @@ class Transcode:
             '-i', file_path,
             '-c:v', 'h264_nvenc',       # Video codec using NVENC (GPU acceleration for NVIDIA), for CPU encoding change "h264_nvenc" to "libx264" *mind the preset if cpu
             '-rc', 'vbr_hq',            # Smart bitrate allocation
-            '-preset', 'medium',          # Encoding preset - "slow", "medium", "fast" -- slower means better compression but longer encode time
+            '-preset', 'fast',          # Encoding preset - "slow", "medium", "fast" -- slower means better compression but longer encode time
             '-cq:v', '19',              # Quality level (lower is better quality)
-            '-b:v', '10M',               # Average target bitrate -- for ref, Netflix's avg is around 4.5MB for 1080p
+            '-b:v', '10M',              # Average target bitrate -- for ref, Netflix's avg is around 4.5MB for 1080p
             '-maxrate', '20M',          # Max bitrate for motion complex scenes
             '-bufsize', '40M',          # Smoothing buffer
             '-pix_fmt', 'yuv420p',      # Ensures compatibility with all browsers

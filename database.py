@@ -84,7 +84,7 @@ class Database:
         # Table for Seasons of the TV Series
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS tv_seasons (
-                id INTEGER PRIMARY KEY UNIQUE,
+                id INTEGER PRIMARY KEY,
                 media_items_id INTEGER,
                 season INTEGER,
                 air_date TEXT,
