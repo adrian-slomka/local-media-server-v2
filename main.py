@@ -558,20 +558,16 @@ class MetadataExtract:
         return 999
 
     def get_series_episode(self, file: str) -> int:
-        pattern = r'(?:[sS]\d{1,3}[eE]|[eE]|part|episode)\s?(?P<episode>\d{1,3})'
+        patterns = [
+            r'^[\s\-]*(?P<episode>\d{1,3})\.',  # e.g., "003. Episode Name"
+            r'[sS]\d{1,3}[eE](?P<episode>\d{1,3})',  # e.g., S01E04
+            r'(?:[eE]|part|episode)[\s\-]?(?P<episode>\d{1,4})',  # e.g., E04, episode 5
+        ]
 
-        series_episode = re.search(pattern, file.lower())
-        if series_episode:
-            episode = int(series_episode.group('episode'))
-            return episode
-        
-        pattern_special = r'(?P<episode>\d{1,3})'
-        name = os.path.splitext(file)[0]
-
-        series_episode = re.search(pattern_special, name)
-        episode = int(series_episode.group('episode'))
-        if episode:
-            return episode
+        for pattern in patterns:
+            match = re.search(pattern, file.lower())
+            if match:
+                return int(match.group('episode'))
         return 999
 
     def get_subtitles(self, path: str):
