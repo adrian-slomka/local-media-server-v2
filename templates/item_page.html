@@ -223,7 +223,7 @@
                             {% set ttitle = media_items.title.replace(' ', '-') %}
                             <div class="i-hover">
                                 <a class="c-d-link" href="{{ url_for('watch_page', metadata_id=media_items.media_metadata[0]['id'], title=ttitle) }}">
-                                    <img class="card-poster poster" src="{{ url_for('static', filename=keyframe_path) }}"></img>
+                                    <img class="card-poster poster" src="{{ url_for('static', filename=keyframe_path) }}" loading="lazy"></img>
                                 </a>
                                 <div class="card-info detail-cc">
                                     <a class="c-d-link" href="{{ url_for('watch_page', metadata_id=media_items.media_metadata[0]['id'], title=ttitle) }}">
@@ -260,7 +260,7 @@
                                             {% set ttitle = media_items.title.replace(' ', '-') + '-season-' + episode['season'] | string + '-episode-' + episode['episode'] | string %}
                                             <div class="i-hover">
                                                 <a class="c-d-link" href="{{ url_for('watch_page', metadata_id=episode['id'], title=ttitle) }}">
-                                                    <img class="card-poster poster" src="{{ url_for('static', filename=keyframe_path) }}"></img>
+                                                    <img class="card-poster poster" src="{{ url_for('static', filename=keyframe_path) }}" loading="lazy"></img>
                                                 </a>
                                                 <div class="card-info detail-cc">
                                                     <a class="c-d-link" href="{{ url_for('watch_page', metadata_id=episode['id'], title=ttitle) }}">
