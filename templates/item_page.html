@@ -216,7 +216,9 @@
                     {% if media_items.category == 'movie' %}
                     <div class="content-section item-content movie-content">
                         {% if media_items.media_metadata[0]['key_frame'] %}
-                            {% set keyframe_path = 'images/keyFrames/'+ media_items.media_metadata[0]['key_frame'] %} 
+                            {% set keyframe_path = 'images/keyFrames/'+ media_items.media_metadata[0]['key_frame'] %}
+                        {% else %}
+                            {% set keyframe_path = 'images/default_keyframe.jpeg' %}  
                         {% endif %}
                         <div class="card-detail-item" item-id="{{media_items.id}}">
 
@@ -252,7 +254,9 @@
                                     {% if episode['season'] == season['season'] %}
 
                                         {% if episode['key_frame'] %}
-                                            {% set keyframe_path = 'images/keyFrames/'+ episode['key_frame'] %} 
+                                            {% set keyframe_path = 'images/keyFrames/'+ episode['key_frame'] %}
+                                        {% else %}
+                                            {% set keyframe_path = 'images/default_keyframe.jpeg' %} 
                                         {% endif %}
 
                                         <div class="card-detail-item" item-id="{{media_items.id}}" metadata-item-id="{{episode['id']}}">
