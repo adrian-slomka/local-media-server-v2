@@ -853,24 +853,30 @@ class Transcode:
             print(f'[{self.timestamp()}] [INFO    ] main.transcode: output file exists, using a unique filename: {os.path.basename(output_file)}')
         
         print(f'[{self.timestamp()}] [INFO    ] main.transcode: transcoding to mp4 x264 aac, {file}...')
-        # Command for FFmpeg to convert the video, audio -- subs extracted separrately
-        # Using NVENC (NVIDIA GPU acceleration) for video and AAC for audio encoding
+        # FFmpeg command to transcode a video using NVIDIA GPU acceleration (NVENC) for video and AAC for audio
+        # Subtitles should be extracted separately if needed
         command = [
             self.ffmpeg_path,
             '-i', file_path,
-            '-c:v', 'h264_nvenc',       # Video codec using NVENC (GPU acceleration for NVIDIA), for CPU encoding change "h264_nvenc" to "libx264" *mind the preset if cpu
-            '-rc', 'vbr_hq',            # Smart bitrate allocation
-            '-preset', 'fast',          # Encoding preset - "slow", "medium", "fast" -- slower means better compression but longer encode time
-            '-cq:v', '19',              # Quality level (lower is better quality)
-            '-b:v', '10M',              # Average target bitrate -- for ref, Netflix's avg is around 4.5MB for 1080p
-            '-maxrate', '20M',          # Max bitrate for motion complex scenes
-            '-bufsize', '40M',          # Smoothing buffer
-            '-pix_fmt', 'yuv420p',      # Ensures compatibility with all browsers
-            '-c:a', 'aac',              # Audio codec (AAC)
-            '-ac', '2',                 # Number of audio channels (stereo)
-            '-movflags', '+faststart',  # Web optimization (enables progressive download)
+            
+            # Video encoding settings
+            '-c:v', 'h264_nvenc',       # Use NVIDIA GPU acceleration (change to "libx264" for CPU encoding)
+            '-rc', 'vbr_hq',            # Use high-quality variable bitrate mode
+            '-preset', 'fast',          # Encoding speed/quality trade-off: slow > medium > fast
+            '-cq:v', '19',              # Constant quality (lower = higher quality)
+            '-b:v', '10M',              # Target average video bitrate (e.g. 10 Mbps)
+            '-maxrate', '20M',          # Maximum allowed bitrate for complex scenes
+            '-bufsize', '40M',          # Bitrate buffer size for rate control
+            '-pix_fmt', 'yuv420p',      # Ensures wide compatibility, especially with web players
+
+            # Audio encoding settings
+            '-c:a', 'aac',              # Encode audio using AAC
+            '-ac', '2',                 # Stereo output (2 audio channels)
+
+            # Output container settings
+            '-movflags', '+faststart',  # Move metadata to beginning for faster web playback
             '-f', 'mp4',                # Output format (MP4)
-            output_file                 # Output file (MP4)
+            output_file                 # Output file path
         ]
 
         try:
