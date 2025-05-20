@@ -448,7 +448,6 @@ class MetadataExtract:
         results = self.get_video_metadata(path)
         file_hash_key = self.get_file_hash(path)
 
-        # series_title, season, episode = get_series_info(file)  # output: str The Simpsons, int 1, int 20
         series_title = self.get_series_title(path)
         season = self.get_series_season(file, root)
         episode = self.get_series_episode(file)
@@ -840,8 +839,7 @@ class Transcode:
                     print(f'[{self.timestamp()}] [INFO    ] main.transcode: file is being used, retrying in {delay} seconds...')
                     time.sleep(delay)
                 else:
-                    print(f'[{self.timestamp()}] [INFO    ] main.transcode: failed to remove file after {retries} attempts: {file_path}')
-                    raise
+                    print(f'[{self.timestamp()}] [INFO    ] main.transcode: failed to remove file after {retries} attempts: {file_path}')                      
 
     def transcode_to_mp4_264_aac(self, file_path):
         file = os.path.basename(file_path)
@@ -851,21 +849,26 @@ class Transcode:
         # Ensure the output file doesn't already exist
         if os.path.exists(output_file):
             # If the output file exists, add a unique timestamp to avoid overwriting
-            output_file = os.path.splitext(file_path)[0] + f"_{self.timestamp()}.mp4"
-            print(f'[{self.timestamp()}] [INFO    ] main.transcode: output file exists, using a unique filename: {output_file}')
+            output_file = os.path.splitext(file_path)[0] + f"_{datetime.now().strftime('%Y%m%d%H%M%S')}.mp4"
+            print(f'[{self.timestamp()}] [INFO    ] main.transcode: output file exists, using a unique filename: {os.path.basename(output_file)}')
         
         print(f'[{self.timestamp()}] [INFO    ] main.transcode: transcoding to mp4 x264 aac, {file}...')
-        # Command for FFmpeg to convert the video, audio, and subtitle streams
+        # Command for FFmpeg to convert the video, audio -- subs extracted separrately
         # Using NVENC (NVIDIA GPU acceleration) for video and AAC for audio encoding
         command = [
             self.ffmpeg_path,
             '-i', file_path,
-            '-c:v', 'h264_nvenc',       # Video codec using NVENC (GPU acceleration for NVIDIA), for CPU encoding change "h264_nvenc" to "libx264"
-            '-preset', 'fast',          # Encoding speed preset
-            '-cq:v', '19',              # Set quality level (lower is better quality)
-            '-pix_fmt', 'yuv420p',      # Force 8-bit color (no 10-bit support)
+            '-c:v', 'h264_nvenc',       # Video codec using NVENC (GPU acceleration for NVIDIA), for CPU encoding change "h264_nvenc" to "libx264" *mind the preset if cpu
+            '-rc', 'vbr_hq',            # Smart bitrate allocation
+            '-preset', 'medium',          # Encoding preset - "slow", "medium", "fast" -- slower means better compression but longer encode time
+            '-cq:v', '19',              # Quality level (lower is better quality)
+            '-b:v', '10M',               # Average target bitrate -- for ref, Netflix's avg is around 4.5MB for 1080p
+            '-maxrate', '20M',          # Max bitrate for motion complex scenes
+            '-bufsize', '40M',          # Smoothing buffer
+            '-pix_fmt', 'yuv420p',      # Ensures compatibility with all browsers
             '-c:a', 'aac',              # Audio codec (AAC)
             '-ac', '2',                 # Number of audio channels (stereo)
+            '-movflags', '+faststart',  # Web optimization (enables progressive download)
             '-f', 'mp4',                # Output format (MP4)
             output_file                 # Output file (MP4)
         ]
@@ -873,6 +876,7 @@ class Transcode:
         try:
             # Using subprocess.Popen to get real-time progress updates from stderr
             process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, encoding='utf-8', errors='replace')
+
             # Read stderr for progress info
             while True:
                 stderr_line = process.stderr.readline()
@@ -880,20 +884,14 @@ class Transcode:
                     break  
 
                 if stderr_line:
-                    # Check for FFmpeg progress lines containing frame, time, fps, bitrate, etc.
+                    # Check for FFmpeg progress lines, shows: frame, time, fps, bitrate, etc.
                     if 'frame=' in stderr_line:
                         try:
-                            # Extract frame, fps, time, and bitrate info
-                            frame_info = stderr_line.split('frame=')[-1].split(' ')[0]  # frame count
-                            time_info = stderr_line.split('time=')[-1].split(' ')[0]   # time information
-                            fps_info = stderr_line.split('fps=')[-1].split(' ')[0]     # fps value
-                            bitrate_info = stderr_line.split('bitrate=')[-1].split(' ')[0]  # bitrate info
-                            # Format the output to match your desired format
-                            print(f'frame={frame_info} fps={fps_info} time={time_info} bitrate={bitrate_info} speed={stderr_line.split("speed=")[-1].split("x")[0]}x -- {file}')
-                        except Exception as e:
+                            print(f'{stderr_line.strip()}')
+                        except Exception:
                             pass
+
         except Exception as e:
-            print()
             print(f"[{self.timestamp()}] [INFO    ] main.transcode: an error occurred -> {e}")
 
         self.remove_file_with_retry(file_path)
