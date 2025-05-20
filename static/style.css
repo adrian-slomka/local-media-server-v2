@@ -257,19 +257,11 @@ h3 {
 }
 
 .page-wrapper {
-    padding: 0 3em;
-    margin: 0 auto;
-    min-height: 100vh;
+    padding-left: 2em;
 }
 
-
-
-
-
-
 .sections {
-    position: flex;
-    padding-bottom: 5rem;
+    padding-bottom: 2em;
 }
 
 .scroller-header {
@@ -287,6 +279,7 @@ h3 {
 
 .scroller-controlls {
     display: inline-flex;
+    padding-right: 1em;
 }
 
 .scroller-arrows {
@@ -295,17 +288,10 @@ h3 {
     padding: .5em;
 }
 
-
-
-
-
 .scroller-container {
     display: flex;
-    /*flex-direction: row;*/
     white-space: nowrap;
-    overflow-x: auto; 
     overflow-y: hidden;
-    -webkit-overflow-scrolling: touch; 
     scrollbar-width: none; 
 }
 
@@ -604,18 +590,6 @@ h3 {
     .card {
         width: 9.3vw;
     }
-}
-
-
-
-
-/* phones */
-@media (max-width: 30rem) {
-    .page-wrapper {
-        padding: 0 1em;
-        margin: 0 auto;
-    }
-
 }
 
 @media (hover: hover) {
@@ -1419,5 +1393,11 @@ input:focus, textarea:focus, select:focus {
     .wp-next-text h1 {
         padding: .5em;
         border-top: 2px solid #ffffff80;
+    }
+}
+
+@media (max-width: 780px) {
+    .page-wrapper {
+        padding-left: 1em;
     }
 }
