@@ -16,7 +16,7 @@
                 <div class="tiles-container">
                     {% for item in media_items %}
                     <a class="card" href="{{ url_for( 'details_page', title=item['title'], item_id=item['id']) }}">
-                        <img class="card-poster poster" src="{{ url_for('static', filename='images/posters/w400_' + item['poster_path'].lstrip('/') if  item['poster_path'] else 'static/images/default_poster.jpg') }}" alt="{{ item['title'] }}"></img>
+                        <img class="card-poster poster" src="{{ url_for('static', filename='images/posters/w400_' + item['poster_path'].lstrip('/') if  item['poster_path'] else 'images/default_poster.jpg') }}" alt="{{ item['title'] }}"></img>
                         <div class="card-info">
                             <div class="card-text card-title" title="{{ item['title'] }}">{{ item['title'] }}</div>
                             <div class="card-text card-description">{% for genre in item.genres %}{{ genre }}{% if not loop.last %} | {% endif %}{% endfor %}</div>
