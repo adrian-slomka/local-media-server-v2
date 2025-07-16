@@ -12,11 +12,14 @@ fetch(`/get_user_item_data_details/${mediaItemId}`)
                 const button = document.querySelector(`.button-highlights-id-${metadataItemId}`);
                 
                 // If watched status is 1, mark the button as filled, otherwise remove the filled class
-                if (watchedStatus === 1) {
-                    button.classList.add('filled');
-                } else {
-                    button.classList.remove('filled');
+                if (button) { // check if .button-highlights-id-${metadataItemId} exist to avoid potential TypeError: button is null
+                    if (watchedStatus === 1) {
+                        button.classList.add('filled');
+                    } else {
+                        button.classList.remove('filled');
+                    }
                 }
+
             });
         }
     })
