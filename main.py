@@ -1016,13 +1016,16 @@ class FlaskWeb:
                 user_data = Database.fetch_user_data(0)
                 media_items = []
                 for row in user_data:
-                    if row.watchlist == 1:
-                        item_id = row.media_items_id
-                        item = Database.fetch_item(item_id)
-                        item = Database().swap_title(item)
-                        media_items.append(item)
+                    if not row.watchlist == 1:
+                        continue
+                    item_id = row.media_items_id
+                    item = Database.fetch_item(item_id)
+                    if not item: # Skip item from watchlist not found in database main table
+                        continue
+                    item = Database().swap_title(item)
+                    media_items.append(item)
             except Exception as e:
-                return render_template('500.html', message=e)           
+                print(f'[{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}] main.FlaskWeb: watchlist() -> {e}')           
             return render_template('watchlist_page.html', media_items=media_items)
 
         @self.app.route('/settings', methods=['GET', 'POST'])
