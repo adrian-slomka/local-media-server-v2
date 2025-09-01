@@ -1,3 +1,5 @@
+# This version is outdated. Newest version [here](https://github.com/adrian-slomka/local-media-server-v3).
+
 # Local Media Server
 
 A Python-based web application powered by Flask that serves as a local media server similar to Plex or Jellyfin.
